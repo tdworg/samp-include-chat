@@ -32,6 +32,14 @@ freely, subject to the following restrictions:
 #define _TDW_CHLIB__SHORTER
 
 
+// Checks if a string is packed.
+// https://github.com/TDW-org/samp-include-string
+// Other information: //www.compuphase.com/pawn/String_Manipulation.pdf
+// Author: Untonyst.
+#if !defined IsPackedString
+	#define IsPackedString(%0) ((%0){0} != 0)
+#endif
+
 #if !defined TDW_MAX_LENGTH_PER_LINE
 	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH / 2)
 #endif
