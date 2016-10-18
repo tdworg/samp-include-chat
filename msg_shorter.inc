@@ -33,7 +33,7 @@ freely, subject to the following restrictions:
 
 
 #if !defined TDW_MAX_LENGTH_PER_LINE
-	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH)
+	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH / 2)
 #endif
 
 
