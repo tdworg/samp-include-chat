@@ -271,7 +271,7 @@ static stock
 stock
 	SendClientMessageEx(playerid, color, message[])
 {
-	new pos, tmp, length =strlen(message);
+	new pos, tmp, length = strlen(message);
 	if (IsPackedString(message))
 	{
 		while ((pos = strfind(message, !"\n", false, pos++)) != -1)
