@@ -38,6 +38,10 @@ freely, subject to the following restrictions:
 
 #include "tdw_chat/detect/foreach"
 
+#if !defined _TDW_CHAT_FOREACH_DEFINED
+	#error You can use this library because the foreach library not found.
+#endif
+
 #if !defined MAX_CHATGROUPS
 	#define MAX_CHATGROUPS (10)
 #endif
