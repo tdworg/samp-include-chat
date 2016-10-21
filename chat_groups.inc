@@ -3,7 +3,7 @@
 	Chat Groups
 
 | Verison:
-1.0.0
+1.0.1
 
 | License:
 Copyright (c) 2016 Double V
