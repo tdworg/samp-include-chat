@@ -118,6 +118,7 @@ stock
 }
 
 
+#if !defined FILTERSCRIPT
 public
 	OnGameModeInit()
 {
@@ -135,4 +136,24 @@ public
 
 #if defined TDWCH_CG@OnGameModeInit
 forward TDWCH_CG@OnGameModeInit();
+#endif
+#else
+public
+	OnFilterScriptInit()
+{
+	Iter_Init(TDW_g_sCGroup@PList);
+	return 1;
+}
+
+#if defined _ALS_OnFilterScriptInit
+	#undef OnFilterScriptInit
+#else
+	#define _ALS_OnFilterScriptInit
+#endif
+
+#define OnFilterScriptInit TDWCH_CG@OnFilterScriptInit
+
+#if defined TDWCH_CG@OnFilterScriptInit
+forward TDWCH_CG@OnFilterScriptInit();
+#endif
 #endif
