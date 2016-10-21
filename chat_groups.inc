@@ -103,6 +103,7 @@ stock
 	if (Iter_Contains(TDW_g_sCGroup@PList[groupid], playerid) == 0)
 		return 0;
 	Iter_SafeRemove(TDW_g_sCGroup@PList[groupid], playerid, playerid);
+	return 1;
 }
 
 stock
