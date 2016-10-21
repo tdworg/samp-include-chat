@@ -266,3 +266,34 @@ static stock
 	}
 	return last_pos;
 }
+
+
+stock
+	SendClientMessageEx(playerid, color, message[])
+{
+	new pos, tmp, length = strlen(message);
+	if (IsPackedString(message))
+	{
+		while ((pos = strfind(message, !"\n", false, pos++)) != -1)
+		{
+			tmp = message{pos};
+			message{pos} = '\0';
+			SendClientMessage(playerid, color, message);
+			message{pos} = tmp;
+			strmid(message, message, pos + 1, length, length);
+		}
+	}
+	else
+	{
+		while ((pos = strfind(message, !"\n", false, pos++)) != -1)
+		{
+			tmp = message[pos];
+			message[pos] = '\0';
+			SendClientMessage(playerid, color, message);
+			message[pos] = tmp;
+			strmid(message, message, pos + 1, length, length);
+		}
+	}
+	SendClientMessage(playerid, color, message);
+	return 1;
+}
