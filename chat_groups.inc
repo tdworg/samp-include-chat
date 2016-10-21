@@ -36,6 +36,7 @@ freely, subject to the following restrictions:
 
 #define _TDW_CHLIB__CHAT_GROUPS
 
+#include "tdw_chat/detect/foreach"
 
 #if !defined MAX_CHATGROUPS
 	#define MAX_CHATGROUPS (10)
