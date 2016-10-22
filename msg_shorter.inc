@@ -3,7 +3,7 @@
 	Message shorter
 
 | Verison:
-1.0.1
+1.1.0
 
 | License:
 Copyright (c) 2016 Double V
@@ -56,7 +56,7 @@ stock
 		i, spos, epos, tmp;
 	if (IsPackedString(message))
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message{epos};
@@ -64,12 +64,12 @@ stock
 			SendClientMessage(playerid, color, message);
 			message{epos} = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	else
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message[epos];
@@ -77,7 +77,7 @@ stock
 			SendClientMessage(playerid, color, message);
 			message[epos] = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
@@ -104,7 +104,7 @@ stock
 		i, spos, epos, tmp;
 	if (IsPackedString(message))
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message{epos};
@@ -112,12 +112,12 @@ stock
 			SendClientMessageToAll(color, message);
 			message{epos} = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	else
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message[epos];
@@ -152,7 +152,7 @@ stock
 		i, spos, epos, tmp;
 	if (IsPackedString(message))
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message{epos};
@@ -160,12 +160,12 @@ stock
 			SendPlayerMessageToPlayer(playerid, senderid, message);
 			message{epos} = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	else
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message[epos];
@@ -173,7 +173,7 @@ stock
 			SendPlayerMessageToPlayer(playerid, senderid, message);
 			message[epos] = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
@@ -200,7 +200,7 @@ stock
 		i, spos, epos, tmp;
 	if (IsPackedString(message))
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message{epos};
@@ -208,12 +208,12 @@ stock
 			SendPlayerMessageToAll(senderid, message);
 			message{epos} = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	else
 	{
-		while (i != shift_counts)
+		while (i++ < shift_counts)
 		{
 			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
 			tmp = message[epos];
@@ -221,7 +221,7 @@ stock
 			SendPlayerMessageToAll(senderid, message);
 			message[epos] = tmp;
 			strmid(message, message, epos + 1, length, length);
-			i++;
+			length -= epos + 1;
 		}
 	}
 	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
