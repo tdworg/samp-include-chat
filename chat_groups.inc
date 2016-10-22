@@ -36,7 +36,9 @@ freely, subject to the following restrictions:
 
 #define _TDW_CHLIB__CHAT_GROUPS
 
+
 #include "tdw_chat/detect/foreach"
+
 
 #if !defined _TDW_CHAT_FOREACH_DEFINED
 	#error You can use this library because the foreach library not found.
@@ -68,6 +70,7 @@ stock
 	return CGroup:TDW_g_sCGroup@Id++;
 }
 
+
 stock
 	RemoveChatGroup(CGroup:groupid)
 {
@@ -78,6 +81,7 @@ stock
 	return 1;
 }
 
+
 stock
 	IsValidChatGroup(CGroup:groupid)
 {
@@ -85,6 +89,7 @@ stock
 		return 0;
 	return 1;
 }
+
 
 stock
 	AddPlayerToChatGroup(CGroup:groupid, playerid)
@@ -94,6 +99,7 @@ stock
 	Iter_Add(TDW_g_sCGroup@PList[_:groupid], playerid);
 	return 1;
 }
+
 
 stock
 	RemovePlayerFromChatGroup(CGroup:groupid, &playerid)
@@ -105,6 +111,7 @@ stock
 	Iter_SafeRemove(TDW_g_sCGroup@PList[groupid], playerid, playerid);
 	return 1;
 }
+
 
 stock
 	SendClientMessageToChatGroup(CGroup:groupid, color, const message[])
