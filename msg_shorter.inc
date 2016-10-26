@@ -29,9 +29,11 @@ freely, subject to the following restrictions:
 #if defined _inc_msg_shorter
 	#undef _inc_msg_shorter
 #endif
+
 #if defined _TDW_CHLIB__SHORTER
 	#endinput
 #endif
+
 #define _TDW_CHLIB__SHORTER
 
 

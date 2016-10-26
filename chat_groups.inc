@@ -127,41 +127,41 @@ stock
 
 
 #if !defined FILTERSCRIPT
-public
-	OnGameModeInit()
-{
-	Iter_Init(TDW_g_sCGroup@PList);
-	return 1;
-}
+	public
+		OnGameModeInit()
+	{
+		Iter_Init(TDW_g_sCGroup@PList);
+		return 1;
+	}
 
-#if defined _ALS_OnGameModeInit
-	#undef OnGameModeInit
+	#if defined _ALS_OnGameModeInit
+		#undef OnGameModeInit
+	#else
+		#define _ALS_OnGameModeInit
+	#endif
+
+	#define OnGameModeInit TDWCH_CG@OnGameModeInit
+
+	#if defined TDWCH_CG@OnGameModeInit
+	forward TDWCH_CG@OnGameModeInit();
+	#endif
 #else
-	#define _ALS_OnGameModeInit
-#endif
+	public
+		OnFilterScriptInit()
+	{
+		Iter_Init(TDW_g_sCGroup@PList);
+		return 1;
+	}
 
-#define OnGameModeInit TDWCH_CG@OnGameModeInit
+	#if defined _ALS_OnFilterScriptInit
+		#undef OnFilterScriptInit
+	#else
+		#define _ALS_OnFilterScriptInit
+	#endif
 
-#if defined TDWCH_CG@OnGameModeInit
-forward TDWCH_CG@OnGameModeInit();
-#endif
-#else
-public
-	OnFilterScriptInit()
-{
-	Iter_Init(TDW_g_sCGroup@PList);
-	return 1;
-}
+	#define OnFilterScriptInit TDWCH_CG@OnFilterScriptInit
 
-#if defined _ALS_OnFilterScriptInit
-	#undef OnFilterScriptInit
-#else
-	#define _ALS_OnFilterScriptInit
-#endif
-
-#define OnFilterScriptInit TDWCH_CG@OnFilterScriptInit
-
-#if defined TDWCH_CG@OnFilterScriptInit
-forward TDWCH_CG@OnFilterScriptInit();
-#endif
+	#if defined TDWCH_CG@OnFilterScriptInit
+	forward TDWCH_CG@OnFilterScriptInit();
+	#endif
 #endif
