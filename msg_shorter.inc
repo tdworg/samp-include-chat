@@ -3,7 +3,7 @@
 	Message shorter
 
 | Verison:
-1.1.0
+2.0.0
 
 | License:
 Copyright (c) 2016 Double V
