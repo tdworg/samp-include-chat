@@ -42,51 +42,59 @@ freely, subject to the following restrictions:
 // Other information: //www.compuphase.com/pawn/String_Manipulation.pdf
 // Author: Untonyst.
 #if !defined IsPackedString
-	#define IsPackedString(%0) ((%0){0} != 0)
+	#define IsPackedString%0(%1) ((%1){0} != 0)
 #endif
 
 #if !defined TDW_MAX_LENGTH_PER_LINE
-	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH / 2)
+	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH/2)
+#endif
+
+#if !defined TDW_MSG_SHORTER_SEPARATOR
+	#define TDW_MSG_SHORTER_SEPARATOR (' ')
 #endif
 
 
 stock
 	TDWMSRH@SendClientMessage(playerid, color, message[])
 {
-	new length = strlen(message),
-		shift_counts = length / TDW_MAX_LENGTH_PER_LINE,
-		i, spos, epos, tmp;
-	if (IsPackedString(message))
+	new length = strlen(message);
+	if (length <= TDW_MAX_LENGTH_PER_LINE)
+		return SendClientMessage(playerid, color, message);
+	new start_pos, end_pos, tmp, bool:is_packed = IsPackedString(message), ret;
+	goto _no_init;
+	new buffer[MAX_CHATBUBBLE_LENGTH char];
+	_no_init:
+	while (end_pos <= length)
 	{
-		while (i++ < shift_counts)
+		start_pos = GetStartPos(message, end_pos, is_packed, length),
+		end_pos = start_pos + MAX_CHATBUBBLE_LENGTH;
+		if (is_packed)
 		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message{epos};
-			message{epos} = '\0';
-			SendClientMessage(playerid, color, message);
-			message{epos} = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
+			if (end_pos >= length)
+			{
+				strmid(buffer, message, start_pos, length, sizeof buffer);
+				return SendClientMessage(playerid, color, message);
+			}
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			// SendClientMessage gives a error when we use this:
+			//    SendClientMessage(playerid, color, buffer{start_pos});
+			// So i use strmid to get part of the message and send it.
+			strmid(buffer, message, start_pos, end_pos, sizeof buffer);
+			buffer{end_pos - start_pos} = '\0';
+			ret = SendClientMessage(playerid, color, buffer);
+		}
+		else
+		{
+			if (end_pos >= length)
+				return SendClientMessage(playerid, color, message[start_pos]);
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			tmp = message[end_pos];
+			message[end_pos] = '\0';
+			ret = SendClientMessage(playerid, color, message[start_pos]);
+			message[end_pos] = tmp;
 		}
 	}
-	else
-	{
-		while (i++ < shift_counts)
-		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message[epos];
-			message[epos] = '\0';
-			SendClientMessage(playerid, color, message);
-			message[epos] = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
-		}
-	}
-	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
-	{
-		SendClientMessage(playerid, color, message);
-	}
-	return 1;
+	return ret;
 }
 
 #if defined _ALS_SendClientMessage
@@ -101,40 +109,44 @@ stock
 stock
 	TDWMSRH@SendClientMessageToAll(color, message[])
 {
-	new length = strlen(message),
-		shift_counts = length / TDW_MAX_LENGTH_PER_LINE,
-		i, spos, epos, tmp;
-	if (IsPackedString(message))
+	new length = strlen(message);
+	if (length <= TDW_MAX_LENGTH_PER_LINE)
+		return SendClientMessageToAll(color, message);
+	new start_pos, end_pos, tmp, bool:is_packed = IsPackedString(message), ret;
+	goto _no_init;
+	new buffer[MAX_CHATBUBBLE_LENGTH char];
+	_no_init:
+	while (end_pos <= length)
 	{
-		while (i++ < shift_counts)
+		start_pos = GetStartPos(message, end_pos, is_packed, length),
+		end_pos = start_pos + MAX_CHATBUBBLE_LENGTH;
+		if (is_packed)
 		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message{epos};
-			message{epos} = '\0';
-			SendClientMessageToAll(color, message);
-			message{epos} = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
+			if (end_pos >= length)
+			{
+				strmid(buffer, message, start_pos, length, sizeof buffer);
+				return SendClientMessageToAll(color, message);
+			}
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			// SendClientMessageToAll gives a error when we use this:
+			//    SendClientMessageToAll(color, buffer{start_pos});
+			// So i use strmid to get part of the message and send it.
+			strmid(buffer, message, start_pos, end_pos, sizeof buffer);
+			buffer{end_pos - start_pos} = '\0';
+			ret = SendClientMessageToAll(color, buffer);
+		}
+		else
+		{
+			if (end_pos >= length)
+				return SendClientMessageToAll(color, message[start_pos]);
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			tmp = message[end_pos];
+			message[end_pos] = '\0';
+			ret = SendClientMessageToAll(color, message[start_pos]);
+			message[end_pos] = tmp;
 		}
 	}
-	else
-	{
-		while (i++ < shift_counts)
-		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message[epos];
-			message[epos] = '\0';
-			SendClientMessageToAll(color, message);
-			message[epos] = tmp;
-			strmid(message, message, epos + 1, length, length);
-			i++;
-		}
-	}
-	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
-	{
-		SendClientMessageToAll(color, message);
-	}
-	return 1;
+	return ret;
 }
 
 #if defined _ALS_SendClientMessageToAll
@@ -147,90 +159,102 @@ stock
 
 
 stock
-	TDWMSRH@SendPlayerMsgToPlayer(playerid, senderid, message[])
+	TDWMSRH@SendPlayerMsg2Player(playerid, senderid, message[])
 {
-	new length = strlen(message),
-		shift_counts = length / TDW_MAX_LENGTH_PER_LINE,
-		i, spos, epos, tmp;
-	if (IsPackedString(message))
+	new length = strlen(message);
+	if (length <= TDW_MAX_LENGTH_PER_LINE)
+		return SendPlayerMessageToPlayer(playerid, senderid, message);
+	new start_pos, end_pos, tmp, bool:is_packed = IsPackedString(message), ret;
+	goto _no_init;
+	new buffer[MAX_CHATBUBBLE_LENGTH char];
+	_no_init:
+	while (end_pos <= length)
 	{
-		while (i++ < shift_counts)
+		start_pos = GetStartPos(message, end_pos, is_packed, length),
+		end_pos = start_pos + MAX_CHATBUBBLE_LENGTH;
+		if (is_packed)
 		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message{epos};
-			message{epos} = '\0';
-			SendPlayerMessageToPlayer(playerid, senderid, message);
-			message{epos} = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
+			if (end_pos >= length)
+			{
+				strmid(buffer, message, start_pos, length, sizeof buffer);
+				return SendPlayerMessageToPlayer(playerid, senderid, message);
+			}
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			// SendPlayerMessageToPlayer gives a error when we use this:
+			//    SendPlayerMessageToPlayer(playerid, senderid, message);
+			// So i use strmid to get part of the message and send it.
+			strmid(buffer, message, start_pos, end_pos, sizeof buffer);
+			buffer{end_pos - start_pos} = '\0';
+			ret = SendPlayerMessageToPlayer(playerid, senderid, message);
+		}
+		else
+		{
+			if (end_pos >= length)
+				return SendPlayerMessageToPlayer(playerid, senderid,
+					message[start_pos]
+				);
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			tmp = message[end_pos];
+			message[end_pos] = '\0';
+			ret = SendPlayerMessageToPlayer(playerid, senderid,
+				message[start_pos]
+			);
+			message[end_pos] = tmp;
 		}
 	}
-	else
-	{
-		while (i++ < shift_counts)
-		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message[epos];
-			message[epos] = '\0';
-			SendPlayerMessageToPlayer(playerid, senderid, message);
-			message[epos] = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
-		}
-	}
-	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
-	{
-		SendPlayerMessageToPlayer(playerid, senderid, message);
-	}
-	return 1;
+	return ret;
 }
 
-#if defined _ALS_SendPlayerMessageToPlayer
-	#undef SendPlayerMessageToPlayer
+#if defined _ALS_SendClientMessageToAll
+	#undef SendClientMessageToAll
 #else
-	#define _ALS_SendPlayerMessageToPlayer
+	#define _ALS_SendClientMessageToAll
 #endif
 
-#define SendPlayerMessageToPlayer TDWMSRH@SendPlayerMsgToPlayer
+#define SendClientMessageToAll TDWMSRH@SendClientMessageToAll
 
 
 stock
 	TDWMSRH@SendPlayerMessageToAll(senderid, message[])
 {
-	new length = strlen(message),
-		shift_counts = length / TDW_MAX_LENGTH_PER_LINE,
-		i, spos, epos, tmp;
-	if (IsPackedString(message))
+	new length = strlen(message);
+	if (length <= TDW_MAX_LENGTH_PER_LINE)
+		return SendPlayerMessageToAll(senderid, message);
+	new start_pos, end_pos, tmp, bool:is_packed = IsPackedString(message), ret;
+	goto _no_init;
+	new buffer[MAX_CHATBUBBLE_LENGTH char];
+	_no_init:
+	while (end_pos <= length)
 	{
-		while (i++ < shift_counts)
+		start_pos = GetStartPos(message, end_pos, is_packed, length),
+		end_pos = start_pos + MAX_CHATBUBBLE_LENGTH;
+		if (is_packed)
 		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message{epos};
-			message{epos} = '\0';
-			SendPlayerMessageToAll(senderid, message);
-			message{epos} = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
+			if (end_pos >= length)
+			{
+				strmid(buffer, message, start_pos, length, sizeof buffer);
+				return SendPlayerMessageToAll(senderid, message);
+			}
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			// SendPlayerMessageToAll gives a error when we use this:
+			//    SendPlayerMessageToAll(senderid, message);
+			// So i use strmid to get part of the message and send it.
+			strmid(buffer, message, start_pos, end_pos, sizeof buffer);
+			buffer{end_pos - start_pos} = '\0';
+			ret = SendPlayerMessageToAll(senderid, message);
+		}
+		else
+		{
+			if (end_pos >= length)
+				return SendPlayerMessageToAll(senderid, message[start_pos]);
+			end_pos = GetEndPos(message, end_pos, is_packed);
+			tmp = message[end_pos];
+			message[end_pos] = '\0';
+			ret = SendPlayerMessageToAll(senderid, message[start_pos]);
+			message[end_pos] = tmp;
 		}
 	}
-	else
-	{
-		while (i++ < shift_counts)
-		{
-			epos = GetLastSpace(message, spos, TDW_MAX_LENGTH_PER_LINE);
-			tmp = message[epos];
-			message[epos] = '\0';
-			SendPlayerMessageToAll(senderid, message);
-			message[epos] = tmp;
-			strmid(message, message, epos + 1, length, length);
-			length -= epos + 1;
-		}
-	}
-	if ((length % TDW_MAX_LENGTH_PER_LINE) != 0)
-	{
-		SendPlayerMessageToAll(senderid, message);
-	}
-	return 1;
+	return ret;
 }
 
 #if defined _ALS_SendPlayerMessageToAll
@@ -242,60 +266,59 @@ stock
 #define SendPlayerMessageToAll TDWMSRH@SendPlayerMessageToAll
 
 
+
 static stock
-	GetLastSpace(const message[], start_pos, limit)
+	GetStartPos(const message[], current_pos, bool:is_packed = false,
+		size = sizeof message)
 {
-	new size = strlen(message);
-	assert (0 <= start_pos < size);
-	new last_pos;
-	if (IsPackedString(message))
+	if (is_packed)
 	{
-		do
+		while (current_pos++ < size)
 		{
-			if (message{start_pos} == ' ')
-				last_pos = start_pos;
+			// If the current character is not the delimiter, break the loop.
+			if (message{current_pos} != TDW_MSG_SHORTER_SEPARATOR)
+				break;
+			current_pos++;
 		}
-		while (++start_pos < limit);
 	}
 	else
 	{
-		do
+		while (current_pos < size)
 		{
-			if (message[start_pos] == ' ')
-				last_pos = start_pos;
+			// If the current character is not the delimiter, break the loop.
+			if (message[current_pos] != TDW_MSG_SHORTER_SEPARATOR)
+				break;
+			current_pos++;
 		}
-		while (++start_pos < limit);
 	}
-	return last_pos;
+	// returns the position that was found.
+	return current_pos;
 }
 
 
-stock
-	SendClientMessageEx(playerid, color, message[])
+static stock
+	GetEndPos(const message[], current_pos, bool:is_packed = false)
 {
-	new pos, tmp, length = strlen(message);
-	if (IsPackedString(message))
+	if (is_packed)
 	{
-		while ((pos = strfind(message, !"\n", false, pos++)) != -1)
+		while (current_pos != 0)
 		{
-			tmp = message{pos};
-			message{pos} = '\0';
-			SendClientMessage(playerid, color, message);
-			message{pos} = tmp;
-			strmid(message, message, pos + 1, length, length);
+			// If the current character is the delimiter, break the loop.
+			if (message{current_pos} == TDW_MSG_SHORTER_SEPARATOR)
+				break;
+			--current_pos;
 		}
 	}
 	else
 	{
-		while ((pos = strfind(message, !"\n", false, pos++)) != -1)
+		while (current_pos != 0)
 		{
-			tmp = message[pos];
-			message[pos] = '\0';
-			SendClientMessage(playerid, color, message);
-			message[pos] = tmp;
-			strmid(message, message, pos + 1, length, length);
+			// If the current character is the delimiter, break the loop.
+			if (message[current_pos] == TDW_MSG_SHORTER_SEPARATOR)
+				break;
+			--current_pos;
 		}
 	}
-	SendClientMessage(playerid, color, message);
-	return 1;
+	// returns the position that was found.
+	return current_pos;
 }
