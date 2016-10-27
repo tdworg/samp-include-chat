@@ -46,7 +46,7 @@ freely, subject to the following restrictions:
 #endif
 
 #if !defined TDW_MAX_LENGTH_PER_LINE
-	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH/2)
+	#define TDW_MAX_LENGTH_PER_LINE (MAX_CHATBUBBLE_LENGTH)
 #endif
 
 #if !defined TDW_MSG_SHORTER_SEPARATOR
