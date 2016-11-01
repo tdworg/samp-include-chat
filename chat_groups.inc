@@ -41,7 +41,7 @@ freely, subject to the following restrictions:
 
 
 #if !defined _TDW_CHAT_FOREACH_DEFINED
-	#error You can use this library because the foreach library not found.
+	#error You can't use this library because the foreach library not found.
 #endif
 
 #if !defined MAX_CHATGROUPS
