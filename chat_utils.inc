@@ -54,6 +54,7 @@ stock
 	#if __Pawn < 0x030A
 		if (line == 0)
 		{
+			#emit retn
 			SendClientMessageToAll(0, __space);
 			SendClientMessage(INVALID_PLAYER_ID, 0, __space);
 		}
