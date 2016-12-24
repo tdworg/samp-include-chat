@@ -273,7 +273,7 @@ static stock
 {
 	if (is_packed)
 	{
-		while (current_pos++ < size)
+		while (current_pos < size)
 		{
 			// If the current character is not the delimiter, break the loop.
 			if (message{current_pos} != TDW_MSG_SHORTER_SEPARATOR)

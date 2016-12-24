@@ -52,13 +52,11 @@ stock
 		return 0;
 
 	#if __Pawn < 0x030A
-		if (line == 0)
-		{
+		goto _not_call;
 			#emit retn
 			SendClientMessageToAll(0, __space);
 			SendClientMessage(INVALID_PLAYER_ID, 0, __space);
-		}
-		{}
+		_not_call:
 	#endif
 
 	if (playerid == cellmin)
