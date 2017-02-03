@@ -54,8 +54,7 @@ freely, subject to the following restrictions:
 #endif
 
 
-stock
-	TDWMSRH@SendClientMessage(playerid, color, message[])
+stock TDWMSRH@SendClientMessage(playerid, color, message[])
 {
 	new length = strlen(message);
 	if (length <= TDW_MAX_LENGTH_PER_LINE)
@@ -106,8 +105,7 @@ stock
 #define SendClientMessage TDWMSRH@SendClientMessage
 
 
-stock
-	TDWMSRH@SendClientMessageToAll(color, message[])
+stock TDWMSRH@SendClientMessageToAll(color, message[])
 {
 	new length = strlen(message);
 	if (length <= TDW_MAX_LENGTH_PER_LINE)
@@ -158,8 +156,7 @@ stock
 #define SendClientMessageToAll TDWMSRH@SendClientMessageToAll
 
 
-stock
-	TDWMSRH@SendPlayerMsg2Player(playerid, senderid, message[])
+stock TDWMSRH@SendPlayerMsg2Player(playerid, senderid, message[])
 {
 	new length = strlen(message);
 	if (length <= TDW_MAX_LENGTH_PER_LINE)
@@ -214,8 +211,7 @@ stock
 #define SendClientMessageToAll TDWMSRH@SendClientMessageToAll
 
 
-stock
-	TDWMSRH@SendPlayerMessageToAll(senderid, message[])
+stock TDWMSRH@SendPlayerMessageToAll(senderid, message[])
 {
 	new length = strlen(message);
 	if (length <= TDW_MAX_LENGTH_PER_LINE)
@@ -267,8 +263,7 @@ stock
 
 
 
-static stock
-	GetStartPos(const message[], current_pos, bool:is_packed = false,
+static stock GetStartPos(const message[], current_pos, bool:is_packed = false,
 		size = sizeof message)
 {
 	if (is_packed)
@@ -296,8 +291,7 @@ static stock
 }
 
 
-static stock
-	GetEndPos(const message[], current_pos, bool:is_packed = false)
+static stock GetEndPos(const message[], current_pos, bool:is_packed = false)
 {
 	if (is_packed)
 	{
